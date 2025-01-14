@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comic Images</title>
+    <style>
+        /* Simple CSS to display images vertically */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        #images-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Space between images */
+            max-width: 800px;
+            width: 100%;
+            padding: 10px;
+            justify-content: flex-start;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Comic Images</h1>
+    <div id="images-container">
+        <!-- Images will be inserted here -->
+    </div>
+
+    <button onclick="loadImages()">Load Comic Images</button>
+
+    <script>
+        async function loadImages() {
+            try {
+                const response = await fetch('/get-comic-images');
+                const data = await response.json();
+                
+                if (data.images && data.images.length > 0) {
+                    const imagesContainer = document.getElementById('images-container');
+                    imagesContainer.innerHTML = ''; // Clear previous images
+                    data.images.forEach(imageUrl => {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = imageUrl;
+                        imgElement.alt = 'Comic Image';
+                        imagesContainer.appendChild(imgElement);
+                    });
+                } else {
+                    alert('No images found');
+                }
+            } catch (error) {
+                console.error('Error loading comic images:', error);
+                alert('Failed to load images');
+            }
+        }
+    </script>
+
+</body>
+</html>
